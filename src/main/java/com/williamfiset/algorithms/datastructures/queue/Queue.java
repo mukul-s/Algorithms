@@ -5,9 +5,9 @@ package com.williamfiset.algorithms.datastructures.queue;
  * @param <T> the type of element held int the queue
  */
 public interface Queue<T> {
-  public void offer(T elem);
+  public void enqueue(T elem);
 
-  public T poll();
+  public T dequeue();
 
   public T peek();
 

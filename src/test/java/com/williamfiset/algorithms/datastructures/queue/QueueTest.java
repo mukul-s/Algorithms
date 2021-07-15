@@ -29,7 +29,7 @@ public class QueueTest {
   @Test(expected = Exception.class)
   public void testPollOnEmpty() {
     for (Queue queue : queues) {
-      queue.poll();
+      queue.dequeue();
     }
   }
 
@@ -43,7 +43,7 @@ public class QueueTest {
   @Test
   public void testOffer() {
     for (Queue<Integer> queue : queues) {
-      queue.offer(2);
+      queue.enqueue(2);
       assertThat(queue.size()).isEqualTo(1);
     }
   }
@@ -51,7 +51,7 @@ public class QueueTest {
   @Test
   public void testPeek() {
     for (Queue<Integer> queue : queues) {
-      queue.offer(2);
+      queue.enqueue(2);
       assertThat((int) queue.peek()).isEqualTo(2);
       assertThat(queue.size()).isEqualTo(1);
     }
@@ -60,8 +60,8 @@ public class QueueTest {
   @Test
   public void testPoll() {
     for (Queue<Integer> queue : queues) {
-      queue.offer(2);
-      assertThat((int) queue.poll()).isEqualTo(2);
+      queue.enqueue(2);
+      assertThat((int) queue.dequeue()).isEqualTo(2);
       assertThat(queue.size()).isEqualTo(0);
     }
   }
@@ -70,19 +70,27 @@ public class QueueTest {
   public void testExhaustively() {
     for (Queue<Integer> queue : queues) {
       assertThat(queue.isEmpty()).isTrue();
-      queue.offer(1);
+      queue.enqueue(1);
       assertThat(queue.isEmpty()).isFalse();
-      queue.offer(2);
+      queue.enqueue(2);
       assertThat(queue.size()).isEqualTo(2);
       assertThat((int) queue.peek()).isEqualTo(1);
       assertThat(queue.size()).isEqualTo(2);
-      assertThat((int) queue.poll()).isEqualTo(1);
+      assertThat((int) queue.dequeue()).isEqualTo(1);
       assertThat(queue.size()).isEqualTo(1);
       assertThat((int) queue.peek()).isEqualTo(2);
       assertThat(queue.size()).isEqualTo(1);
-      assertThat((int) queue.poll()).isEqualTo(2);
+      assertThat((int) queue.dequeue()).isEqualTo(2);
       assertThat(queue.size()).isEqualTo(0);
       assertThat(queue.isEmpty()).isTrue();
     }
   }
+
+  @Test(expected = Exception.class)
+  public void testOverflow() {
+    ArrayQueue<Integer> arrayQueue = new ArrayQueue<>(1);
+    arrayQueue.enqueue(1);
+    arrayQueue.enqueue(2);
+  }
+
 }

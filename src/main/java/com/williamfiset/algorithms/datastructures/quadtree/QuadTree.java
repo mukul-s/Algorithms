@@ -179,7 +179,7 @@ public class QuadTree {
           heap.add(new SortedPt(distance, new Pt(xx, yy)));
         } else if (distance < radius) {
           heap.poll();
-          // System.out.println("POLLED: " + heap.poll());
+          // System.out.println("POLLED: " + heap.dequeue());
           heap.add(new SortedPt(distance, new Pt(xx, yy)));
         }
       }

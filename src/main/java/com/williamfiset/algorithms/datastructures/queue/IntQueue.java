@@ -47,7 +47,7 @@ public class IntQueue implements Queue<Integer> {
 
   // Add an element to the queue
   @Override
-  public void offer(Integer value) {
+  public void enqueue(Integer value) {
     if (isFull()) {
       throw new RuntimeException("Queue too small!");
     }
@@ -56,9 +56,9 @@ public class IntQueue implements Queue<Integer> {
     end = end % data.length;
   }
 
-  // Make sure you check is the queue is not empty before calling poll!
+  // Make sure you check is the queue is not empty before calling dequeue!
   @Override
-  public Integer poll() {
+  public Integer dequeue() {
     if (size == 0) {
       throw new RuntimeException("Queue is empty");
     }
@@ -72,27 +72,27 @@ public class IntQueue implements Queue<Integer> {
 
     IntQueue q = new IntQueue(5);
 
-    q.offer(1);
-    q.offer(2);
-    q.offer(3);
-    q.offer(4);
-    q.offer(5);
+    q.enqueue(1);
+    q.enqueue(2);
+    q.enqueue(3);
+    q.enqueue(4);
+    q.enqueue(5);
 
-    System.out.println(q.poll()); // 1
-    System.out.println(q.poll()); // 2
-    System.out.println(q.poll()); // 3
-    System.out.println(q.poll()); // 4
+    System.out.println(q.dequeue()); // 1
+    System.out.println(q.dequeue()); // 2
+    System.out.println(q.dequeue()); // 3
+    System.out.println(q.dequeue()); // 4
 
     System.out.println(q.isEmpty()); // false
 
-    q.offer(1);
-    q.offer(2);
-    q.offer(3);
+    q.enqueue(1);
+    q.enqueue(2);
+    q.enqueue(3);
 
-    System.out.println(q.poll()); // 5
-    System.out.println(q.poll()); // 1
-    System.out.println(q.poll()); // 2
-    System.out.println(q.poll()); // 3
+    System.out.println(q.dequeue()); // 5
+    System.out.println(q.dequeue()); // 1
+    System.out.println(q.dequeue()); // 2
+    System.out.println(q.dequeue()); // 3
 
     System.out.println(q.isEmpty()); // true
 
@@ -107,8 +107,8 @@ public class IntQueue implements Queue<Integer> {
 
     // IntQueue times at around 0.0324 seconds
     long start = System.nanoTime();
-    for (int i = 0; i < n; i++) intQ.offer(i);
-    for (int i = 0; i < n; i++) intQ.poll();
+    for (int i = 0; i < n; i++) intQ.enqueue(i);
+    for (int i = 0; i < n; i++) intQ.dequeue();
     long end = System.nanoTime();
     System.out.println("IntQueue Time: " + (end - start) / 1e9);
 

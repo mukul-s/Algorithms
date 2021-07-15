@@ -132,7 +132,7 @@ public class MinDHeapTest {
 
     PQueue <Integer> pq = new PQueue<>(in);
     PriorityQueue <Integer> PQ = new PriorityQueue<>();
-    for (int value : in) PQ.offer(value);
+    for (int value : in) PQ.enquque(value);
 
     assertThat(pq.isMinHeap(0)).isTrue();
 
@@ -209,7 +209,7 @@ public class MinDHeapTest {
 
       // Add all the elements to both priority queues
       for (Integer value : randNums) {
-        pq1.offer(value);
+        pq1.enquque(value);
         pq2.add(value);
       }
 
@@ -220,8 +220,8 @@ public class MinDHeapTest {
         assertThat(pq1.peek()).isEqualTo(pq2.peek());
         assertThat(pq1.contains(pq1.peek())).isEqualTo(pq2.contains(pq2.peek()));
 
-        Integer v1 = pq1.poll();
-        Integer v2 = pq2.poll();
+        Integer v1 = pq1.dequeue();
+        Integer v2 = pq2.dequeue();
 
         assertThat(v1).isEqualTo(v2);
         assertThat(pq1.peek()).isEqualTo(pq2.peek());
@@ -246,7 +246,7 @@ public class MinDHeapTest {
 
       // Add all the elements to both priority queues
       for (Integer value : randNums) {
-        pq1.offer(value);
+        pq1.enquque(value);
         pq2.add(value);
       }
 

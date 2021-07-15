@@ -1,73 +1,85 @@
 package com.williamfiset.algorithms.datastructures.queue;
 
 /**
- * Besides the Generics, the loss of property of size is another difference between ArrayQueue and
- * IntQueue. The size of ArrayQueue is calculated by the formula, as are empty status and full
- * status.
- *
- * <p>ArrayQueue maximum size is data.length - 1. The place of the variable rear is always in front
- * of the variable front logistically if regard the data array as circular. so the number of states
- * of the combination of rear and front is the length of the data array. And one of the total states
- * is used to be the judge if the queue is empty or full.
- *
- * @author liujingkun, liujkon@gmail.com
+ * A lazy initialized circular queue
+ * front points to index which is next for dequeue operation
+ * rear points to index which is next for enqueue operation
+ * @author muku
  */
+@SuppressWarnings("unchecked")
 public class ArrayQueue<T> implements Queue<T> {
-  private Object[] data;
-  private int front;
-  private int rear;
+    private int front;
+    private int rear;
+    private int capacity;
+    private static final int DEFAULT_CAPACITY = 10;
+    private T[] elements = (T[]) new Object[0];
 
-  public ArrayQueue(int capacity) {
-    // ArrayQueue maximum size is data.length - 1.
-    data = new Object[capacity + 1];
-    front = 0;
-    rear = 0;
-  }
-
-  @Override
-  public void offer(T elem) {
-    if (isFull()) {
-      throw new RuntimeException("Queue is full");
+    public ArrayQueue() {
+        this.capacity = DEFAULT_CAPACITY;
     }
-    data[rear++] = elem;
-    rear = adjustIndex(rear, data.length);
-  }
 
-  @Override
-  @SuppressWarnings("unchecked")
-  public T poll() {
-    if (isEmpty()) {
-      throw new RuntimeException("Queue is empty");
+    public ArrayQueue(int capacity) {
+        if (capacity <= 0) {
+            throw new RuntimeException("Invalid capacity");
+        }
+        this.capacity = capacity;
     }
-    front = adjustIndex(front, data.length);
-    return (T) data[front++];
-  }
 
-  @Override
-  @SuppressWarnings("unchecked")
-  public T peek() {
-    if (isEmpty()) {
-      throw new RuntimeException("Queue is empty");
+    @Override
+    public void enqueue(T elem) {
+        ensureCapacity();
+        if (isFull()) {
+            throw new RuntimeException("Queue Overflow");
+        }
+        elements[rear++] = elem;
+        adjustIndex(rear);
     }
-    front = adjustIndex(front, data.length);
-    return (T) data[front];
-  }
 
-  @Override
-  public int size() {
-    return adjustIndex(rear + data.length - front, data.length);
-  }
+    private void ensureCapacity() {
+        if (capacity == 0) {
+            capacity = DEFAULT_CAPACITY;
+        } else if (elements.length == 0) {
+            // capacity = elements.length - 1
+            elements = (T[]) new Object[capacity + 1];
+        }
+    }
 
-  @Override
-  public boolean isEmpty() {
-    return rear == front;
-  }
+    private boolean isFull() {
+        return size() == capacity;
+    }
 
-  public boolean isFull() {
-    return (front + data.length - rear) % data.length == 1;
-  }
+    @Override
+    // @SuppressWarnings("unchecked")
+    public T dequeue() {
+        if (isEmpty()) {
+            throw new RuntimeException("Queue underflow");
+        }
+        T removeEle = elements[front];
+        front++;
+        adjustIndex(front);
+        return removeEle;
+    }
 
-  private int adjustIndex(int index, int size) {
-    return index >= size ? index - size : index;
-  }
+    @Override
+    //@SuppressWarnings("unchecked")
+    public T peek() {
+        if (isEmpty()) {
+            throw new RuntimeException("Queue underflow");
+        }
+        return elements[front];
+    }
+
+    @Override
+    public int size() {
+        return rear >= front ? (rear - front) : capacity - (front - rear);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return size() == 0;
+    }
+
+    private int adjustIndex(int index) {
+        return index % capacity;
+    }
 }
